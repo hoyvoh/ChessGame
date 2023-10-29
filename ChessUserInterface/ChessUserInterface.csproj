@@ -7,24 +7,24 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Assets\BishopB.png" />
-    <None Remove="Assets\BishopW.png" />
-    <None Remove="Assets\Board.png" />
-    <None Remove="Assets\CursorB.cur" />
-    <None Remove="Assets\CursorW.cur" />
-    <None Remove="Assets\icon.ico" />
-    <None Remove="Assets\KingB.png" />
-    <None Remove="Assets\KingW.png" />
-    <None Remove="Assets\KnightB.png" />
-    <None Remove="Assets\KnightW.png" />
-    <None Remove="Assets\PawnB.png" />
-    <None Remove="Assets\PawnW.png" />
-    <None Remove="Assets\QueenB.png" />
-    <None Remove="Assets\QueenW.png" />
-    <None Remove="Assets\RookB.png" />
-    <None Remove="Assets\RookW.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Assets\BishopB.png" />
+		<None Remove="Assets\BishopW.png" />
+		<None Remove="Assets\Board.png" />
+		<None Remove="Assets\CursorB.cur" />
+		<None Remove="Assets\CursorW.cur" />
+		<None Remove="Assets\icon.ico" />
+		<None Remove="Assets\KingB.png" />
+		<None Remove="Assets\KingW.png" />
+		<None Remove="Assets\KnightB.png" />
+		<None Remove="Assets\KnightW.png" />
+		<None Remove="Assets\PawnB.png" />
+		<None Remove="Assets\PawnW.png" />
+		<None Remove="Assets\QueenB.png" />
+		<None Remove="Assets\QueenW.png" />
+		<None Remove="Assets\RookB.png" />
+		<None Remove="Assets\RookW.png" />
+	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ChessLogic\ChessLogic.csproj" />

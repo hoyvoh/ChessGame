@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessLogic
+namespace ChessLogic.Pieces
 {
-    public class Knight : Piece
+    public  class Rook : Piece
     {
-        public override PieceType Type => PieceType.Knight;
+        public override PieceType Type => PieceType.Rook;
         public override Player Color { get; }
-        public Knight(Player color)
+        public Rook(Player color)
         {
             Color = color;
         }
+
         public override Piece Copy()
         {
-            Knight copy = new Knight(Color);
+            Rook copy = new Rook(Color);
             copy.HasMoved = HasMoved;
             return copy;
         }
