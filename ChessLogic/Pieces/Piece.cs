@@ -15,9 +15,37 @@ namespace ChessLogic
         public bool HasMoved { get; set; } = false;
         public abstract Piece Copy();
         public abstract IEnumerable<Move> GetMoves(Position from, Board board);
-        protected IEnumerable<Position> MovePositionInDir(Position pos, Board board, Direction dir)
-        {
 
+        // To check possible moves in a given direction, from a position on a board 
+        protected IEnumerable<Position> MovePositionInDir(Position from, Board board, Direction dir)
+        {
+            //Iterate through every position in that direction while on the board
+            for (Position pos = from+dir; Board.IsInside(pos); pos = pos+dir)
+            {
+                //Check if the position is empty
+                //If empty -> reacheable
+                //Else check color
+                if (board.IsEmpty(pos)){
+                    yield return pos;
+                    continue;
+                }
+                //Check if same color
+                //Not same color -> reacheable due to capture
+                //Else -> unreacheable
+                Piece piece = board[pos];
+                if(piece.Color != Color)
+                {
+                    yield return pos;
+                }
+                //If encounter a piece -> stop iteration
+                yield break;
+            }
+        }
+
+        //For pieces that can go multiple directions, return all possible moves in each of them
+        protected IEnumerable<Position> MovePositionInDirs(Position from, Board board, Direction[] dirs) 
+        {
+            return dirs.SelectMany(dir => MovePositionInDir(from, board, dir));
+        }
         }
     }
-}

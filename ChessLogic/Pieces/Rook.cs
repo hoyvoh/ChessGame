@@ -15,6 +15,14 @@ namespace ChessLogic.Pieces
             Color = color;
         }
 
+        private readonly Direction[] dirs = new Direction[]
+        {
+            Direction.Up,
+            Direction.Down, 
+            Direction.Left,
+            Direction.Right
+        };
+
         public override Piece Copy()
         {
             Rook copy = new Rook(Color);
