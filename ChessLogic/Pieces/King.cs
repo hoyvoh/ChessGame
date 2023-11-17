@@ -14,6 +14,17 @@ namespace ChessLogic.Pieces
         {
             Color = color;
         }
+        private static readonly Direction[] dirs = new Direction[]
+        {
+            Direction.Up,
+            Direction.Down, 
+            Direction.Left,
+            Direction.Right,
+            Direction.UpLeft,
+            Direction.UpRight,
+            Direction.DownLeft,
+            Direction.DownRight
+        };
 
         public override Piece Copy()
         {
@@ -44,6 +55,20 @@ namespace ChessLogic.Pieces
                 yield return new NormalMove(from, to);
             }
         }
+
+        //King cannot capture opponent king
+        //Castling do not capture anything
+        //=> override method here
+        public override bool CanCaptureOpponentKing(Position from, Board board)
+        {
+            //Check if all the legal moves are the opponent's king
+            return MovePositions(from, board).Any(to =>
+            {
+                Piece piece = board[to];
+                return piece != null && piece.Type == PieceType.King;
+            });
+        }
+
 
     }
 }

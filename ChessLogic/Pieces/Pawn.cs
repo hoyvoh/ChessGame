@@ -69,11 +69,21 @@ namespace ChessLogic
                     yield return new NormalMove(from, to);
                 }
             }
-            }
+        }
 
         public override IEnumerable<Move> GetMoves(Position from, Board board)
         {
             return ForwardMoves(from, board).Concat(DiagonalMoves(from, board));
+        }
+
+        //Pawn can only capture diagonally
+        public override bool CanCaptureOpponentKing(Position from, Board board)
+        {
+            return DiagonalMoves(from, board).Any(move =>
+            {
+                Piece piece = board[move.ToPos];
+                return piece != null && piece.Type == PieceType.King;
+            });
         }
 
     }

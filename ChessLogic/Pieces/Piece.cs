@@ -15,7 +15,7 @@ namespace ChessLogic
         public bool HasMoved { get; set; } = false;
         public abstract Piece Copy();
         public abstract IEnumerable<Move> GetMoves(Position from, Board board);
-
+        
         // To check possible moves in a given direction, from a position on a board 
         protected IEnumerable<Position> MovePositionInDir(Position from, Board board, Direction dir)
         {
@@ -47,5 +47,16 @@ namespace ChessLogic
         {
             return dirs.SelectMany(dir => MovePositionInDir(from, board, dir));
         }
+
+        public virtual bool CanCaptureOpponentKing(Position from, Board board)
+        {
+            return GetMoves(from, board).Any(move =>
+            {
+                //If existing a position that a piece can capture the opponent's king, return true
+                Piece piece = board[move.ToPos];
+                //The destination position must not be null and contains a King
+                return piece != null && piece.Type == PieceType.King;
+            });
         }
     }
+}

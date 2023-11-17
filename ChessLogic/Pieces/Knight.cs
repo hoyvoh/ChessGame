@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +32,15 @@ namespace ChessLogic
                     yield return from + hDir * 2 + vDir;
                 }
             }
+        }
+
+        private IEnumerable<Position> MovePositions(Position from, Board board)
+        {
+            return PotentialPosition(from).Where(pos => Board.IsInside(pos) && (board.IsEmpty(pos) || board[pos].Color != Color));
+        }
+        public override IEnumerable<Move> GetMoves(Position from, Board board)
+        {
+            return MovePositions(from, board).Select(to => new NormalMove(from, to));
         }
     }
 }

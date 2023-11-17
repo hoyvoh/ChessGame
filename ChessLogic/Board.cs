@@ -77,5 +77,49 @@ namespace ChessLogic
         {
             return this[pos] == null;
         }
+
+        //Loop through positions
+        //=> return non-empty positions
+        public IEnumerable<Position> PiecePositions()
+        {
+            for(int r = 0; r<8; r++)
+            {
+                for(int c= 0; c<8; c++)
+                {
+                    Position pos = new Position(r, c);
+                    if (!IsEmpty(pos))
+                    {
+                        yield return pos;
+                    }
+                }
+            }
+        }
+        //=> return positions containing pieces of a certain color
+        public IEnumerable<Position> PiecePositionsFor(Player player)
+        {
+            return PiecePositions().Where(pos => this[pos].Color == player);
+        }
+
+        public bool IsCheck(Player player)
+        {
+            //Get position of all opponent's pieces
+            return PiecePositionsFor(player.Opponent()).Any(pos =>
+            {
+                //Check if each of them is able to capture
+                //this player's king in the next move
+                Piece piece = this[pos];
+                return piece.CanCaptureOpponentKing(pos, this);
+            });
+        }
+
+        public Board Copy()
+        {
+            Board copy = new Board();
+            foreach(Position pos in PiecePositions())
+            {
+                copy[pos] = this[pos].Copy();
+            }
+            return copy;
+        }
     }
 }
