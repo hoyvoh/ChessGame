@@ -36,7 +36,6 @@ namespace ChessUserInterface
             DrawBoard(gamesState.Board);
             SetCursor(gamesState.CurrentPlayer);
         }
-
         private void InitializeBoard()
         {
             for (int r = 0; r < 8; r++)
@@ -129,6 +128,12 @@ namespace ChessUserInterface
             if (gamesState.Board.IsCheck(gamesState.CurrentPlayer))
             {
                 CheckHighlight();
+            }
+
+            //After the last move, if end game, show the GameOver menu
+            if (gamesState.IsGameOver())
+            {
+                GameOverMenu();
             }
         }
 
