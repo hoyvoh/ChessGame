@@ -43,6 +43,10 @@
                 </Style>
             </Style.Resources>
         </Style>
+
+        <Style TargetType="Grid" x:Key="BoardStyle">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
         
     </Application.Resources>
 </Application>

@@ -18,8 +18,10 @@
 		<None Remove="Assets\KingW.png" />
 		<None Remove="Assets\KnightB.png" />
 		<None Remove="Assets\KnightW.png" />
+		<None Remove="Assets\MenuBG.jpg" />
 		<None Remove="Assets\PawnB.png" />
 		<None Remove="Assets\PawnW.png" />
+		<None Remove="Assets\Pixel_Art_Chess_DevilsWorkshop_V04\MenuBG.jpg" />
 		<None Remove="Assets\QueenB.png" />
 		<None Remove="Assets\QueenW.png" />
 		<None Remove="Assets\RookB.png" />
@@ -41,8 +43,10 @@
     <Resource Include="Assets\KingW.png" />
     <Resource Include="Assets\KnightB.png" />
     <Resource Include="Assets\KnightW.png" />
+    <Resource Include="Assets\MenuBG.jpg" />
     <Resource Include="Assets\PawnB.png" />
     <Resource Include="Assets\PawnW.png" />
+    <Resource Include="Assets\Pixel_Art_Chess_DevilsWorkshop_V04\MenuBG.jpg" />
     <Resource Include="Assets\QueenB.png" />
     <Resource Include="Assets\QueenW.png" />
     <Resource Include="Assets\RookB.png" />

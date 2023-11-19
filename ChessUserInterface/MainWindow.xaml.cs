@@ -31,6 +31,10 @@ namespace ChessUserInterface
         public MainWindow()
         {
             InitializeComponent();
+            //Game Menu layer
+            GameMenu();
+
+            //Chess game layer
             InitializeBoard();
             gamesState = new GameState(Player.White, Board.Initial());
             DrawBoard(gamesState.Board);
@@ -67,6 +71,12 @@ namespace ChessUserInterface
 
         private void BoardGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            //If there is a menu on the screen, nothing happpen on the board
+            if (IsMenuOnScreen())
+            {
+                return;
+            }
+            
             Point point = e.GetPosition(BoardGrid);
             Position pos = ToSquarePosition(point);
 
@@ -112,8 +122,30 @@ namespace ChessUserInterface
 
             if(moveCache.TryGetValue(pos,out Move move))
             {
-                HandleMove(move);
+                if(move.Type == MoveType.PawnPromotion)
+                {
+                    HandlePromotion(move.FromPos, move.ToPos);
+                }
+                 else
+                {
+                    HandleMove(move);
+                }
             }
+        }
+
+        private void HandlePromotion(Position from, Position to)
+        {
+            pieceImages[to.Row, to.Column].Source = Images.GetImage(gamesState.CurrentPlayer, PieceType.Pawn);
+            pieceImages[from.Row, from.Column].Source = null;
+
+            PromotionMenu promMenu = new PromotionMenu(gamesState.CurrentPlayer);
+            MenuContainer.Content = promMenu;
+
+            promMenu.PieceSelected += type => {
+                MenuContainer.Content = null;
+                Move promMove = new PawnPromotion(from, to, type);
+                HandleMove(promMove);
+            };
         }
 
         private void HandleMove(Move move)
@@ -195,6 +227,90 @@ namespace ChessUserInterface
             {
                 Cursor = ChessCursors.BlackCursor;
             }
+        }
+
+        private bool IsMenuOnScreen()
+        {
+            //true: yes 
+            return MenuContainer.Content != null;
+        }
+
+        private void GameOverMenu()
+        {
+            GameOverMenu gameOverMenu = new GameOverMenu(gamesState);
+            MenuContainer.Content = gameOverMenu;
+
+            gameOverMenu.OptionSelected += option =>
+            {
+                //If option == restart, go restart, else back to game menu
+                if (option == Options.Restart)
+                {
+                    MenuContainer.Content = null;
+                    RestartGame();
+                }
+                
+                else if (option == Options.Exit)
+                {
+                    MenuContainer.Content = null;
+                    GameMenu();
+                }
+            };
+        }
+
+        private void RestartGame()
+        {
+            selectedPos = null;
+            HideHighlights();
+            HideCheckHighlight();
+            moveCache.Clear();
+            gamesState = new GameState(Player.White, Board.Initial());
+            DrawBoard(gamesState.Board);
+            SetCursor(gamesState.CurrentPlayer);
+        }
+
+        private void GameMenu()
+        {
+            GameMenu gameMenu = new GameMenu();
+            MenuContainer.Content = gameMenu;
+
+            gameMenu.OptionSelected += option =>
+            {
+                if (option == Options.Start)
+                {
+                    MenuContainer.Content = null;
+                    RestartGame();
+                    return;
+                }
+
+                else if (option == Options.Exit)
+                {
+                    MenuContainer.Content = null;
+                    Application.Current.Shutdown();
+                }
+            };
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!IsMenuOnScreen() && e.Key == Key.Escape)
+            {
+                ShowPausedMenu();
+            }
+        }
+
+        private void ShowPausedMenu()
+        {
+            PauseMenu pauseMenu = new PauseMenu();
+            MenuContainer.Content = pauseMenu;
+
+            pauseMenu.OptionSelected += option =>
+            {
+                MenuContainer.Content = null;
+                if (option == Options.Restart)
+                {
+                    RestartGame();
+                }
+            };
         }
     }
 }

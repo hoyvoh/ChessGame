@@ -44,17 +44,40 @@ namespace ChessLogic
             return board[pos].Color != Color;
         }
 
+        private static IEnumerable<Move> PromotionMoves(Position from, Position to)
+        {
+            yield return new PawnPromotion(from, to, PieceType.Queen);
+            yield return new PawnPromotion(from, to, PieceType.Rook);
+            yield return new PawnPromotion(from, to, PieceType.Bishop);
+            yield return new PawnPromotion(from, to, PieceType.Knight);
+        }
+
         private IEnumerable<Move> ForwardMoves(Position from, Board board)
         {
             Position oneMovePos = from + forward;
             if(CanMoveTo(oneMovePos, board))
             {
-                yield return new NormalMove(from, oneMovePos);
+                if(oneMovePos.Row == 0 || oneMovePos.Row == 7)
+                {
+                    //Promotion move
+                    foreach(Move promMove in PromotionMoves(from, oneMovePos))
+                    {
+                        yield return promMove;
+                    }
+                }
+                else
+                {
+                    //Normal move
+                    yield return new NormalMove(from, oneMovePos);
+                }
+
+                //2 squares move
                 Position twoMovesPos = oneMovePos + forward;
                 if (!HasMoved && CanMoveTo(twoMovesPos, board))
                 {
-                    yield return new NormalMove(from, twoMovesPos);
+                    yield return new DoublePawns(from, twoMovesPos);
                 }
+
             }
 
         }
@@ -82,8 +105,11 @@ namespace ChessLogic
                             }
                         }
                         else
-                {
-                    yield return new NormalMove(from, to);
+                        {
+                            //Capture move
+                            yield return new NormalMove(from, to);
+                        }
+                    }
                 }
             }
         }

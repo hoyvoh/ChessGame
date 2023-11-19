@@ -13,6 +13,13 @@ namespace ChessLogic
         //Rectangular array for 8x8 board
         private readonly Piece[,] pieces = new Piece[8, 8];
 
+        //When a player move a pawn position, we store that position by color
+        private readonly Dictionary<Player, Position> pawnSkipPosition = new Dictionary<Player, Position>
+        {
+            { Player.White, null},
+            { Player.Black, null}
+        };
+
         //Indexer
         public Piece this[int row, int col]
         {
@@ -32,6 +39,19 @@ namespace ChessLogic
             set { this[pos.Row, pos.Column] = value; }
         }
 
+        //For double pawn move
+        //Helper for EnPassant method
+        public Position GetPawnSkipPosition(Player player)
+        {
+            return pawnSkipPosition[player];
+        }
+
+        public void SetPawnSkipPosition(Player player, Position pos)
+        {
+            pawnSkipPosition[player] = pos;
+        }
+
+        //Initialize the board
         public static Board Initial()
         {
             Board board = new Board();
@@ -39,6 +59,7 @@ namespace ChessLogic
             return board;
         }
 
+        //Add standard starting Pieces
         private void AddStartPieces()
         {
             //Upper row for black pieces
@@ -68,11 +89,13 @@ namespace ChessLogic
             }
         }
 
+        //Check if a given position is still inside of the board
         public static bool IsInside(Position pos)
         {
             return pos.Row >= 0 && pos.Row < 8 && pos.Column >= 0 && pos.Column < 8;
         }
 
+        //Check if a given position is empty
         public bool IsEmpty(Position pos)
         {
             return this[pos] == null;
@@ -120,6 +143,71 @@ namespace ChessLogic
                 copy[pos] = this[pos].Copy();
             }
             return copy;
+        }
+
+        public Counting CountPieces()
+        {
+            Counting counting = new Counting();
+            foreach(Position pos in PiecePositions())
+            {
+                Piece piece = this[pos];
+                counting.Increment(piece.Color, piece.Type);
+            }
+            return counting;
+        }
+
+        public bool isInsufficientMaterials()
+        {
+            Counting counting = CountPieces();
+
+            return IsKingVsKing(counting) ||
+                    IsKingVsKingBishop(counting) ||
+                    IsKingVsKingKnight(counting) ||
+                    IsKBVsKB(counting);
+        }
+
+        //Case of King vs King
+        private static bool IsKingVsKing(Counting counting)
+        {
+            return counting.TotalCount == 2;
+        }
+
+        //Case of KingVKing and Knight
+        private static bool IsKingVsKingKnight(Counting counting)
+        {
+            return counting.TotalCount == 3 && 
+                  (counting.Black(PieceType.Knight) == 1 || counting.White(PieceType.Knight) == 1);
+        }
+        //Case of KingVKing and Bishop
+        private static bool IsKingVsKingBishop(Counting counting)
+        {
+            return counting.TotalCount == 3 &&
+                  (counting.Black(PieceType.Bishop) == 1 || counting.White(PieceType.Knight) == 1);
+        }
+
+        //Case of King&Bishop vs King&Bishop
+        private bool IsKBVsKB(Counting counting)
+        {
+            //Check if remaining pieces are 4
+            //And if both of them are bishops
+            if (counting.TotalCount !=4)
+            {
+                return false;
+            }
+            if(counting.White(PieceType.Bishop)!=1 || counting.Black(PieceType.Bishop) != 1)
+            {
+                return false;
+            }
+
+            //Locate black and white bishops
+            Position wBishop = FindPiece(Player.White, PieceType.Bishop);
+            Position bBishop = FindPiece(Player.Black, PieceType.Bishop);
+            return wBishop.SquareColor() == bBishop.SquareColor();
+        }
+        //Locate piece 
+        private Position FindPiece(Player color, PieceType type)
+        {
+            return PiecePositionsFor(color).First(pos => this[pos].Type == type);
         }
     }
 }

@@ -25,6 +25,7 @@
 
         public void MakeMove(Move move)
         {
+            Board.SetPawnSkipPosition(CurrentPlayer, null);
             move.Execute(Board);
             CurrentPlayer = CurrentPlayer.Opponent();
             CheckForGameOver();
@@ -63,7 +64,7 @@
             }
 
             //Check for 50movesRule
-            if (!Board.IsCheck(CurrentPlayer) && TurnCounter >= 99)
+            else if (!Board.IsCheck(CurrentPlayer) && TurnCounter >= 99)
             {
                 //Turn counter exceed 100,
                 //White min 50
@@ -81,7 +82,11 @@
 
             //Check for Insufficient Materials
             //Get all the remaining pieces on the board of two players
-            //Check if both of them have only king remaining
+            //Check if both of them have only king remaining, KingKnights, KingBishops
+            else if (Board.isInsufficientMaterials())
+            {
+                result = Result.Draw(EndReason.InsufficientMaterial);
+            }
             
         }
 

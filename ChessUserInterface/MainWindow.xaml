@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChessUserInterface"
         mc:Ignorable="d"
-        Title="Chess Game" Width="600" SizeToContent="Height"
+        Title="Chess Game" 
+        Width="800" SizeToContent="Height"
         Icon="Assets/icon.ico"
         WindowStartupLocation="CenterScreen"
         Background="#101010"
+        KeyDown="Window_KeyDown"
         >
     <Viewbox>
         <Grid x:Name="BoardGrid"
@@ -16,6 +18,7 @@
               Height="600"
               MouseDown="BoardGrid_MouseDown"
               >
+            
             <Grid.Background>
                 <ImageBrush ImageSource="Assets/Board.png"/>
             </Grid.Background>
@@ -33,7 +36,9 @@
                          >
 
             </UniformGrid>
-    
+
+            <ContentControl x:Name="MenuContainer"/>
+
         </Grid>
         
     </Viewbox>

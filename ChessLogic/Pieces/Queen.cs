@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessLogic.Pieces
+namespace ChessLogic
 {
     public class Queen : Piece
     {

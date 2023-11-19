@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessLogic.Pieces
+namespace ChessLogic
 {
-    public  class Rook : Piece
+    public class Rook : Piece
     {
         public override PieceType Type => PieceType.Rook;
         public override Player Color { get; }
