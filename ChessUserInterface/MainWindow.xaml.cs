@@ -39,6 +39,7 @@ namespace ChessUserInterface
             gamesState = new GameState(Player.White, Board.Initial());
             DrawBoard(gamesState.Board);
             SetCursor(gamesState.CurrentPlayer);
+            //System.Media.SoundPlayer player = new System.Media.SoundPlayer();
         }
         private void InitializeBoard()
         {
@@ -260,6 +261,7 @@ namespace ChessUserInterface
         private void RestartGame()
         {
             selectedPos = null;
+            GameState.TurnCounter = 0;
             HideHighlights();
             HideCheckHighlight();
             moveCache.Clear();
